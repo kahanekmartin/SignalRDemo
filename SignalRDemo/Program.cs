@@ -1,4 +1,5 @@
 using NodeReact;
+using OpenAI.GPT3.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -26,6 +27,8 @@ services.AddOutputCache(options =>
 {
     options.AddBasePolicy(build => build.Cache());
 });
+
+services.AddOpenAIService();
 
 // Configure
 var app = builder.Build();

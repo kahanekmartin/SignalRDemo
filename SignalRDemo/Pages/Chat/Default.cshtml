@@ -1,0 +1,6 @@
+@using NodeReact.AspNetCore
+@model SignalRDemo.Pages.Chat.DefaultModel
+
+@page "/"
+
+@await Html.ReactAsync("Components.Lobby", new Lobby { LogInUrl = "/api/users" })

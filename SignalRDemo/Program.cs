@@ -14,10 +14,12 @@ services.AddMvc().AddRazorRuntimeCompilation();
 
 var settings = MongoClientSettings.FromConnectionString(builder.Configuration["MongoDB:ConnectionString"]);
 
+services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddSingleton<IMongoClient>(config => new MongoClient(settings));
 services.AddSingleton<IUserRepository, UserRepository>();
 
 services.AddScoped<IChatService, ChatService>();
+services.AddScoped<IUserAccessor, UserAccessor>();
 
 services.AddNodeReact(
     config =>

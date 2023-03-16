@@ -21,13 +21,12 @@ public class ChatService : IChatService
     {
         await userRepository.AddMessage(userId,
             new Message { Content = request, Source = MessageSource.USER, Timestamp = DateTimeOffset.Now });
-        
+
+        var user = await userRepository.Get(userId);
+
         var completionResult = await openAiService.ChatCompletion.CreateCompletion(new ChatCompletionCreateRequest
         {
-            Messages = new List<ChatMessage>
-            {
-                ChatMessage.FromUser(request)
-            },
+            Messages = ComposeChatMessages(user.Messages),
             Model = Models.ChatGpt3_5Turbo
         });
 
@@ -42,6 +41,13 @@ public class ChatService : IChatService
 
         return completionResult.Choices.First().Message.Content;
     }
+
+    private List<ChatMessage> ComposeChatMessages(List<Message> userMessages) =>
+        userMessages.OrderBy(x => x.Timestamp)
+                    .Select(x => x.Source == MessageSource.CHAT 
+                        ? ChatMessage.FromAssistant(x.Content) 
+                        : ChatMessage.FromUser(x.Content))
+                    .ToList();
 }
 
 public interface IChatService

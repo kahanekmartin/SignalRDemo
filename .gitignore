@@ -3,3 +3,11 @@ obj/
 /packages/
 riderModule.iml
 /_ReSharper.Caches/
+
+# webpack
+bin
+node_modules
+obj
+debug
+debug.ts
+dist/

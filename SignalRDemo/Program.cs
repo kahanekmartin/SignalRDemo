@@ -1,5 +1,9 @@
+using MongoDB.Driver;
 using NodeReact;
 using OpenAI.GPT3.Extensions;
+using SignalRDemo.Application;
+using SignalRDemo.Data;
+using SignalRDemo.Tests;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +11,13 @@ var services = builder.Services;
 
 //Configure services
 services.AddMvc().AddRazorRuntimeCompilation();
+
+var settings = MongoClientSettings.FromConnectionString(builder.Configuration["MongoDB:ConnectionString"]);
+
+services.AddSingleton<IMongoClient>(config => new MongoClient(settings));
+services.AddSingleton<IUserRepository, UserRepository>();
+
+services.AddScoped<IChatService, ChatService>();
 
 services.AddNodeReact(
     config =>
@@ -53,5 +64,7 @@ app.UseRouting();
 app.MapControllers();
         
 app.UseOutputCache();
+
+app.MapTestingApi();
 
 app.Run();

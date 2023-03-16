@@ -1,0 +1,18 @@
+@using NodeReact.AspNetCore
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script defer src="~/dist/client.js" asp-append-version="true"></script>
+    <title>@ViewData["Title"] - SignalR Demo</title>
+</head>
+<body>
+<main>
+    @RenderBody()
+</main>
+
+@Html.ReactInitJavaScript(delayedLambda: true)
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

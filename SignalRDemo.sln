@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo", "SignalRDemo\SignalRDemo.csproj", "{FE9EE106-20F2-468C-8892-54E7EF0CFC65}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SignalRDemo.Test", "SignalRDemo.Test\SignalRDemo.Test.csproj", "{0710543E-F60B-4EC5-9217-ADD89A06BEEC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{FE9EE106-20F2-468C-8892-54E7EF0CFC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FE9EE106-20F2-468C-8892-54E7EF0CFC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FE9EE106-20F2-468C-8892-54E7EF0CFC65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0710543E-F60B-4EC5-9217-ADD89A06BEEC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0710543E-F60B-4EC5-9217-ADD89A06BEEC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0710543E-F60B-4EC5-9217-ADD89A06BEEC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0710543E-F60B-4EC5-9217-ADD89A06BEEC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

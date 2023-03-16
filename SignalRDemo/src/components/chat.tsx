@@ -28,12 +28,12 @@ const Chat = (props: Props) =>
 {
     const { sendMessage, messages } = useConnection(props.hubUrl)
     
-    return <div>
+    return <>
         <div className='chat'>
             <Messages messages={messages} />
             <SendMessageForm loggedUser={props.loggedUser} sendMessage={sendMessage} />
         </div>
-    </div>
+    </>
 }
 
 export default Chat;

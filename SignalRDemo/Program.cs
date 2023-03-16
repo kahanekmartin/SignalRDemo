@@ -17,6 +17,7 @@ var settings = MongoClientSettings.FromConnectionString(builder.Configuration["M
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddSingleton<IMongoClient>(config => new MongoClient(settings));
 services.AddSingleton<IUserRepository, UserRepository>();
+services.AddSignalR();
 
 services.AddScoped<IChatService, ChatService>();
 services.AddScoped<IUserAccessor, UserAccessor>();
@@ -64,8 +65,42 @@ app.UseCookiePolicy();
 
 app.UseRouting();
 app.MapControllers();
+app.MapRazorPages();
+app.MapHub<ChatHub>("/chat-hub");
         
 app.UseOutputCache();
+
+app.MapPost("/api/users", async (UserRequest request, IUserRepository userRepository, IHttpContextAccessor httpContextAccessor) =>
+{
+    string? userCookie = httpContextAccessor.HttpContext!.Request.Cookies["x-user"];
+
+    var userId = string.IsNullOrEmpty(userCookie)
+        ? CreateNewUserId(httpContextAccessor.HttpContext!)
+        : Guid.Parse(userCookie);
+
+    httpContextAccessor.HttpContext.Items["x-user"] = userId;
+
+    await userRepository.Create(userId, request.Name);
+
+    return Results.Redirect("/chat");
+    
+    static Guid CreateNewUserId(HttpContext context)
+    {
+        var newBasketId = Guid.NewGuid();
+
+        var options = new CookieOptions
+        {
+            Secure = true,
+            SameSite = SameSiteMode.Lax,
+            IsEssential = true
+        };
+
+        context.Response.Cookies.Append("x-user", newBasketId.ToString(), options);
+
+        return newBasketId;
+    }
+});
+
 
 app.MapTestingApi();
 

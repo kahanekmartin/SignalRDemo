@@ -3,7 +3,7 @@ const path = require("path");
 /** @type {import('webpack').Configuration} */
 const clientConfig = {
   entry: "./entry.client.ts",
-  mode: "production",
+  mode: "development",
   module: {
     rules: [
       {
@@ -27,7 +27,7 @@ const clientConfig = {
 /** @type {import('webpack').Configuration} */
 const serverConfig = {
   entry: "./entry.server.ts",
-  mode: "production",
+  mode: "development",
   module: {
     rules: [
       {

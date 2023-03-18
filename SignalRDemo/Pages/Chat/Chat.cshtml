@@ -3,4 +3,4 @@
 @using NodeReact.AspNetCore
 @model SignalRDemo.Pages.Chat.ChatModel
 
-@await Html.ReactAsync("Components.Chat", Model.Model)
+@await Html.ReactAsync("Components.Chat", Model.Model, bootstrapInPlace: true)

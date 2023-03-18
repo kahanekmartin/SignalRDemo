@@ -24,8 +24,9 @@ interface Message
 export type TMessage = Message
 export type TUser = User
 
-const Chat = (props: Props) => 
+export const Chat = (props: Props) => 
 {
+    console.log(props.hubUrl)
     const { sendMessage, messages } = useConnection(props.hubUrl)
     
     return <>
@@ -35,5 +36,3 @@ const Chat = (props: Props) =>
         </div>
     </>
 }
-
-export default Chat;

@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "build": "npx webpack",
-    "watch": "npx webpack watch"
+    "watch": "npx webpack watch --progress"
   },
   "devDependencies": {
     "@types/node": "^18.13.0",
@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@microsoft/signalr": "^7.0.4",
+    "global": "^4.4.0",
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.2",
     "react-dom": "^18.2.0"

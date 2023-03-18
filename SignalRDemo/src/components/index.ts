@@ -1,7 +1,7 @@
-import Chat from './chat'
-import Lobby from './lobby'
+import { Chat } from './chat'
+import { Lobby } from './lobby'
 
-const components = {
+export const components = {
     Chat,
     Lobby,
 };
@@ -9,5 +9,3 @@ const components = {
 try {
   module.exports = components;
 } catch {}
-
-export default components

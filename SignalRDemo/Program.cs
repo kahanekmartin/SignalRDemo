@@ -10,8 +10,6 @@ var builder = WebApplication.CreateBuilder(args);
 var services = builder.Services;
 
 //Configure services
-services.AddMvc().AddRazorRuntimeCompilation();
-
 var settings = MongoClientSettings.FromConnectionString(builder.Configuration["MongoDB:ConnectionString"]);
 
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -21,6 +19,8 @@ services.AddSignalR();
 
 services.AddScoped<IChatService, ChatService>();
 services.AddScoped<IUserAccessor, UserAccessor>();
+
+services.AddRazorPages().AddRazorRuntimeCompilation();
 
 services.AddNodeReact(
     config =>
@@ -33,8 +33,8 @@ services.AddNodeReact(
         });
         config.AddScriptWithoutTransform("~/dist/server.js");
         config.UseDebugReact = true;
-
-        config.ConfigureSystemTextJsonPropsSerializer((_) => { });
+        config.UseServerSideRendering = true;
+        config.ConfigureSystemTextJsonPropsSerializer(_ => { });
     });
 
 services.AddOutputCache(options =>
@@ -63,6 +63,18 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseCookiePolicy();
 
+app.Use(async (context, next) =>
+{
+    string? userCookie = context.Request.Cookies["x-user"];
+
+    if (!string.IsNullOrEmpty(userCookie))
+    {
+        context.Items["x-user"] = Guid.Parse(userCookie);
+    }
+
+    await next();
+});
+
 app.UseRouting();
 app.MapControllers();
 app.MapRazorPages();
@@ -74,16 +86,19 @@ app.MapPost("/api/users", async (UserRequest request, IUserRepository userReposi
 {
     string? userCookie = httpContextAccessor.HttpContext!.Request.Cookies["x-user"];
 
-    var userId = string.IsNullOrEmpty(userCookie)
-        ? CreateNewUserId(httpContextAccessor.HttpContext!)
-        : Guid.Parse(userCookie);
+    if (!string.IsNullOrEmpty(userCookie))
+    {
+        return Results.Redirect("/chat");
+    }
+
+    var userId = CreateNewUserId(httpContextAccessor.HttpContext!);
 
     httpContextAccessor.HttpContext.Items["x-user"] = userId;
 
-    await userRepository.Create(userId, request.Name);
+    var user = await userRepository.Create(userId, request.Name);
 
     return Results.Redirect("/chat");
-    
+
     static Guid CreateNewUserId(HttpContext context)
     {
         var newBasketId = Guid.NewGuid();

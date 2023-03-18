@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using SignalRDemo.Application;
 using SignalRDemo.Data;
@@ -17,16 +18,18 @@ public class ChatModel : PageModel
 
     public Model.Chat Model { get; set; } = new Model.Chat();
     
-    public async Task OnGetAsync()
+    public async Task<IActionResult> OnGetAsync()
     {
         if (!userAccessor.UserId.HasValue)
         { 
-            Redirect("/");
+            return Redirect("/");
         }
 
         var user = await userRepository.Get(userAccessor.UserId!.Value);
 
         Model.HubUrl = "/chat-hub";
         Model.LoggedUser = user;
+
+        return Page();
     }
 }

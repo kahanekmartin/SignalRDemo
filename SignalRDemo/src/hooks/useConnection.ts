@@ -7,7 +7,7 @@ export const useConnection = (hubUrl: string) =>
 {
     if (!hubUrl) return null
 
-    const [connection, setConnection] = useState<HubConnection>()
+    const [connection, setConnection] = useState<HubConnection>(null)
     const [messages, setMessages] = useState([])
 
     const sendMessage = (userId: string, message: string) =>

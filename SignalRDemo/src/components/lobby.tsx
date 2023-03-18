@@ -1,17 +1,25 @@
-import { useState } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { useState, useEffect } from 'react'
+import { Form, Button } from 'react-bootstrap'
+
 
 interface Props
 {
     logInUrl: string
 }
 
-const Lobby = (props: Props) => {
+export const Lobby = (props: Props) => {
+
+    useEffect(() => {
+        console.log('Loaded')
+    }, []);
+
     const [user, setUser] = useState('');
 
-    const logIn = (user: string) =>
+    const logIn = (e: React.FormEvent) =>
     {
         console.log(user)
+
+        e.preventDefault()
 
         fetch(props.logInUrl, {
             method: 'POST',
@@ -23,12 +31,14 @@ const Lobby = (props: Props) => {
           })
     }
 
-    return <Form className='lobby'>
+    return <Form className='lobby'
+        onSubmit={logIn}>
         <Form.Group>
-            <Form.Control placeholder="name" onChange={e => setUser(e.target.value)} />
+            <Form.Control placeholder="name" onChange={e => {
+                console.log(user)
+                setUser(e.target.value)} 
+            }/>
         </Form.Group>
-        <Button variant="success" type="submit" disabled={user.length != 0} onClick={() => logIn(user)}>Join</Button>
+        <Button variant="success" type="submit">Join</Button>
     </Form>
 }
-
-export default Lobby;

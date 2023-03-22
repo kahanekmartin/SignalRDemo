@@ -1,13 +1,17 @@
 import { useEffect, useRef } from 'react'
 
-import { TMessage } from './chat'
+import { TMessage, Source, TUser } from './chat'
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faRobot } from '@fortawesome/free-solid-svg-icons'
 
 interface Props
 {
     messages: TMessage[]
+    loggedUser: TUser
 }
 
-export const Messages = ({messages} : Props) => {
+export const Messages = ({messages, loggedUser} : Props) => {
     const messageRef = useRef<HTMLDivElement>();
 
     useEffect(() => {
@@ -17,12 +21,21 @@ export const Messages = ({messages} : Props) => {
         }
     }, [messages]);
 
-    return <div ref={messageRef} className='message-container' >
+    console.log(messages)
+
+    return <div ref={messageRef} className='messages' >
         {messages.map((m, index) =>
-            <div key={index} className='user-message'>
-                <div className='message bg-primary'>{m.content}</div>
-                {/* <div className='from-user'>{m.user}</div> */}
-            </div>
+            m.source ===  Source.USER ?
+                <div key={index} className='message user'>
+                    <div className='bg-primary icon'>{loggedUser.name.slice(0,2).toUpperCase()}</div>
+                    <div className='bg-primary content'>{m.content}</div>
+                </div> :
+                <div key={index} className='message robot'>
+                    <div className='bg-primary icon'>
+                        <FontAwesomeIcon icon={faRobot} />
+                    </div>
+                    <div className='bg-primary content'>{m.content}</div>
+                </div>
         )}
     </div>
 }

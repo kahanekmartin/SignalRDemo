@@ -5,6 +5,9 @@ import ReactDOMServer from 'react-dom/server';
 import global from 'global'
 import { components } from "./components";
 
+/* @ts-ignore */
+import './index.css'
+
 global.React = React;
 global.ReactDOM = ReactDOM;
 global.ReactDOMServer = ReactDOMServer;

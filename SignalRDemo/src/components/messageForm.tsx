@@ -1,30 +1,32 @@
-import { Form, Button, FormControl, InputGroup } from 'react-bootstrap';
+import { Button, InputGroup, Form, FormControl } from 'react-bootstrap';
 import { useState } from 'react';
 import { TUser } from './chat';
 
-interface Props
-{
-    sendMessage: (userId: string, message: string) => void
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperPlane } from '@fortawesome/free-solid-svg-icons'
+
+interface Props {
+    sendMessage: (message: string) => void
     loggedUser: TUser
 }
 
-const SendMessageForm = ({ sendMessage, loggedUser }: Props) => {
+export const SendMessageForm = ({ sendMessage }: Props) => {
     const [message, setMessage] = useState('');
 
-    return <Form
+    return <Form className="message-form"
         onSubmit={e => {
             e.preventDefault();
-            sendMessage(loggedUser.id, message);
+            sendMessage(message);
             setMessage('');
         }}>
-        <InputGroup>
+        <InputGroup className="input">
             <FormControl type="user" placeholder="message..."
                 onChange={e => setMessage(e.target.value)} value={message} />
             <InputGroup>
-                <Button variant="primary" type="submit" disabled={!message}>Send</Button>
+                <Button variant="primary" type="submit" disabled={!message}>
+                    <FontAwesomeIcon icon={faPaperPlane} />
+                </Button>
             </InputGroup>
         </InputGroup>
     </Form>
-}
-
-export default SendMessageForm;
+};

@@ -15,6 +15,7 @@ var settings = MongoClientSettings.FromConnectionString(builder.Configuration["M
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 services.AddSingleton<IMongoClient>(config => new MongoClient(settings));
 services.AddSingleton<IUserRepository, UserRepository>();
+services.AddSingleton<IMessageRepository, MessageRepository>();
 services.AddSignalR();
 
 services.AddScoped<IChatService, ChatService>();

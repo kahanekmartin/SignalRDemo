@@ -1,4 +1,4 @@
-import SendMessageForm from './messageForm'
+import { SendMessageForm } from './messageForm'
 import { Messages } from './messages'
 import { useConnection } from '../hooks/useConnection'
 
@@ -19,6 +19,13 @@ interface Message
 {
     timestamp: Date
     content: string
+    source: Source
+}
+
+export const enum Source
+{
+    USER = 1, 
+    CHAT = 0
 }
 
 export type TMessage = Message
@@ -26,12 +33,13 @@ export type TUser = User
 
 export const Chat = (props: Props) => 
 {
-    console.log(props.hubUrl)
-    const { sendMessage, messages } = useConnection(props.hubUrl)
+    const { sendMessage, messages } = useConnection(props.hubUrl, props.loggedUser.id)
+
+    console.log('Chat loaded')
     
     return <>
         <div className='chat'>
-            <Messages messages={messages} />
+            <Messages messages={messages} loggedUser={props.loggedUser} />
             <SendMessageForm loggedUser={props.loggedUser} sendMessage={sendMessage} />
         </div>
     </>

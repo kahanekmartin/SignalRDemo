@@ -3,18 +3,18 @@ import { useEffect, useState } from 'react'
 
 import { TMessage, Source } from '../components/chat'
 
-export const useConnection = (hubUrl: string, userId: string) =>
+export const useConnection = (hubUrl: string, userId: string, stream: boolean = false) =>
 {
     if (!hubUrl) return null
 
-    const [connection, setConnection] = useState<HubConnection>(null)
+    const [connection, setConnection] = useState<HubConnection | null>(null)
     const [messages, setMessages] = useState<TMessage[]>([])
 
     const sendMessage = (message: string) =>
     {
         if (connection === null) return
 
-        connection.invoke('Send', userId, message)
+        connection.invoke('Send', userId, message, stream)
 
         const userMessage: TMessage = {
             timestamp: new Date(),
@@ -22,7 +22,20 @@ export const useConnection = (hubUrl: string, userId: string) =>
             source: Source.USER
         }
 
-        setMessages(prevMessages => [...prevMessages, userMessage])
+        if(stream)
+        {
+            const blankResponse: TMessage = {
+                timestamp: new Date(),
+                content: '',
+                source: Source.CHAT
+            }
+
+            setMessages(prevMessages => [...prevMessages, userMessage, blankResponse])
+        }
+        else
+        {
+            setMessages(prevMessages => [...prevMessages, userMessage])
+        }
     }
 
     const initCommunication = () =>
@@ -41,7 +54,12 @@ export const useConnection = (hubUrl: string, userId: string) =>
 
             conn.on('Response', (message: TMessage) => 
             {
-                setMessages(prevMessages => [...prevMessages, message])
+                setMessages(prevMessages => 
+                    {
+                        const newMessages = stream ? prevMessages.slice(0, -1) : prevMessages
+                        
+                        return [...newMessages, message]
+                    })
             })
 
             conn.on('Registered', (messages: TMessage[]) =>

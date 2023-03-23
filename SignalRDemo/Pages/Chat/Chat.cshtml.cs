@@ -18,7 +18,7 @@ public class ChatModel : PageModel
 
     public Model.Chat Model { get; set; } = new Model.Chat();
     
-    public async Task<IActionResult> OnGetAsync()
+    public async Task<IActionResult> OnGetAsync([FromQuery] bool stream = true)
     {
         if (!userAccessor.UserId.HasValue)
         { 
@@ -29,6 +29,7 @@ public class ChatModel : PageModel
 
         Model.HubUrl = "/chat-hub";
         Model.LoggedUser = user;
+        Model.Stream = stream;
 
         return Page();
     }

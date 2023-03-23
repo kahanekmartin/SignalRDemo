@@ -21,11 +21,23 @@ public class ChatHub : Hub<IChatHub>
         await Clients.Groups(userId.ToString()).Registered(chatHistory);
     }
     
-    public async Task Send(Guid userId, string message)
+    public async Task Send(Guid userId, string message, bool stream = false)
     {
-        var response = await chatService.Respond(message, userId);
+        if (stream)
+        {
+            var responseStream = chatService.RespondAsStream(message, userId);
 
-        await Clients.Groups(userId.ToString()).Response(response);
+            await foreach (var response in responseStream)
+            {
+                await Clients.Groups(userId.ToString()).Response(response);
+            }   
+        }
+        else
+        {
+            var response = await chatService.Respond(message, userId);
+
+            await Clients.Groups(userId.ToString()).Response(response);
+        }
     }
 }
 

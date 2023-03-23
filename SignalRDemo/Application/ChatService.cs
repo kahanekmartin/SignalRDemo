@@ -50,6 +50,53 @@ public class ChatService : IChatService
 
         return response;
     }
+    
+    async IAsyncEnumerable<Message> IChatService.RespondAsStream(string request, Guid userId)
+    {
+        Message message = new() { Id = Guid.NewGuid(),Content = request, Source = MessageSource.USER, Timestamp = DateTimeOffset.Now };
+        await messageRepository.Insert(message);
+        await userRepository.AddMessage(userId, message);
+
+        var user = await userRepository.Get(userId);
+
+        var completionResult = openAiService.ChatCompletion.CreateCompletionAsStream(new ChatCompletionCreateRequest
+        {
+            Messages = ComposeChatMessages(user.Messages),
+            Model = Models.ChatGpt3_5Turbo,
+            Stream = true
+        });
+
+        string lastCompletion = "";
+        
+        await foreach (var completion in completionResult)
+        {
+            if (completion.Successful)
+            {
+                lastCompletion += completion.Choices.First().Message.Content;
+                
+                Message streamResponse = new ()
+                {
+                    Id = Guid.NewGuid(),
+                    Content = lastCompletion,
+                    Source = MessageSource.CHAT,
+                    Timestamp = DateTimeOffset.Now
+                };
+
+                yield return streamResponse;
+            }
+        }
+        
+        Message response = new ()
+        {
+            Id = Guid.NewGuid(),
+            Content = lastCompletion,
+            Source = MessageSource.CHAT,
+            Timestamp = DateTimeOffset.Now
+        };
+        
+        await userRepository.AddMessage(userId, response);
+        await messageRepository.Insert(response);
+    }
 
     async Task<List<Message>> IChatService.GetHistory(Guid? userId)
     {
@@ -74,5 +121,6 @@ public class ChatService : IChatService
 public interface IChatService
 {
     Task<Message> Respond(string request, Guid userId);
+    IAsyncEnumerable<Message> RespondAsStream(string request, Guid userId);
     Task<List<Message>> GetHistory(Guid? userId = null);
 }

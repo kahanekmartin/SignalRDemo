@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Form, Button } from 'react-bootstrap'
+import { Form, Button, InputGroup } from 'react-bootstrap'
 
 
 interface Props
@@ -23,22 +23,32 @@ export const Lobby = (props: Props) => {
 
         fetch(props.logInUrl, {
             method: 'POST',
+            redirect: 'follow',
             headers: {
               Accept: 'application.json',
               'Content-Type': 'application/json'
             },
             body: JSON.stringify({ 'name': user })
           })
+          .then(response => {
+            console.log(response)
+            if(response.redirected)
+            {
+                window.location.href = response.url
+            }
+          })
     }
 
-    return <Form className='lobby'
+    return <Form className='lobby message-form'
         onSubmit={logIn}>
-        <Form.Group>
+        <Form.Group className='input'>
             <Form.Control placeholder="name" onChange={e => {
                 console.log(user)
                 setUser(e.target.value)} 
             }/>
         </Form.Group>
-        <Button variant="success" type="submit">Join</Button>
+        <InputGroup>
+            <Button variant="success" type="submit">Join</Button>
+        </InputGroup>
     </Form>
 }

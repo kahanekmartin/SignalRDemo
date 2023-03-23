@@ -27,7 +27,7 @@ export const Messages = ({messages, loggedUser} : Props) => {
         {messages.map((m, index) =>
             m.source ===  Source.USER ?
                 <div key={index} className='message user'>
-                    <div className='bg-primary icon'>{loggedUser.name.slice(0,2).toUpperCase()}</div>
+                    <div className='bg-primary icon' style={{background: "green"}} >{loggedUser.name.slice(0,2).toUpperCase()}</div>
                     <div className='bg-primary content'>{m.content}</div>
                 </div> :
                 <div key={index} className='message robot'>

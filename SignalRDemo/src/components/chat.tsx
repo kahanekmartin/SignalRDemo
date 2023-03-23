@@ -6,6 +6,7 @@ interface Props
 {
     hubUrl: string
     loggedUser: User
+    stream: boolean
 }
 
 interface User
@@ -33,7 +34,7 @@ export type TUser = User
 
 export const Chat = (props: Props) => 
 {
-    const { sendMessage, messages } = useConnection(props.hubUrl, props.loggedUser.id)
+    const { sendMessage, messages } = useConnection(props.hubUrl, props.loggedUser.id, props.stream)
 
     console.log('Chat loaded')
     

@@ -102,7 +102,7 @@ body
     color: #000;
   }
   
- .chat .message-form {
+ .message-form {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +111,7 @@ body
     background-color: transparent;
 }
 
-.chat .message-form .input{
+.message-form .input{
     display: flex;
     align-items: center;
     justify-content: center;
@@ -123,21 +123,21 @@ body
 }
 
 
-.chat .message-form input {
+.message-form input {
     font-size: 14px;
     width: 40vw;
     height: 40px;
     border: none;
 }
 
-.chat .message-form .input-group .btn {
+ .message-form .input-group .btn {
     padding: 10px 20px;
     font-size: 14px;
     outline: none;
     cursor: pointer;
 }
 
-.chat .message-form .input-group button{
+.message-form .input-group button{
 	background: none;
 	color: inherit;
 	border: none;
@@ -147,10 +147,25 @@ body
   color: gray;
 }
 
-.chat .message-form .input-group .btn:disabled {
+.message-form .input-group .btn:disabled {
     cursor: not-allowed;
 }
 
 *:focus {
     outline: none;
+}
+
+@media only screen and (max-width: 768px) {
+  /* For mobile phones: */
+   .message-form input {
+    width: 75vw;
+}
+
+.chat .message .icon {
+  display: none;
+}
+
+.chat .message .content {
+  width: 100%;
+}
 }

@@ -34,6 +34,15 @@ This project also uses .NET user secrets. You will need to create a `secrets.jso
   }
 }
 
-## Note
+```
 
- The application stores user session information in a "x-user" cookie.
+## Getting Started
+
+1. Clone the repository
+2. Navigate to the root folder
+3. Run the project
+```bash
+dotnet run
+```
+
+#### Note: This project stores x-user cookie for user session tracking.

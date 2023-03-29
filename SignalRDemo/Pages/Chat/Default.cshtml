@@ -1,0 +1,6 @@
+@page "/"
+
+@using NodeReact.AspNetCore
+@model SignalRDemo.Pages.Chat.DefaultModel
+
+@await Html.ReactAsync("Components.Lobby", Model.Model)

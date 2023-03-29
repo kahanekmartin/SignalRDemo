@@ -13,7 +13,7 @@ public class UserRepository : IUserRepository
         users = database.GetCollection<User>("Users");
     }
     
-    public async Task<User> Create(Guid id, string name)
+    public async Task<User?> Create(Guid id, string name)
     {
         await users.InsertOneAsync(new User { Id = id, Name = name });
 
@@ -38,7 +38,7 @@ public class UserRepository : IUserRepository
 
 public interface IUserRepository
 {
-    Task<User> Create(Guid id, string name);
+    Task<User?> Create(Guid id, string name);
     Task<User> Get(Guid id);
     Task<List<User>> Get();
     Task AddMessage(Guid userId, Message message);

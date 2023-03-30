@@ -11,7 +11,7 @@ This project demonstrates how to use SignalR for real-time communication between
 
 ## Libraries Used (for prototyping purposes)
 
-- NodeReact
+- NodeReact.NET
 - Betalgo.OpenAI.GPT3
 
 ## Prerequisites
